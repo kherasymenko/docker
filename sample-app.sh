@@ -9,16 +9,20 @@ cp sample_app.py tempdir/.
 cp -r templates/* tempdir/templates/.
 cp -r static/* tempdir/static/.
 
-echo "From python" > tempdir/Dockerfile
-echo "RUN pip install flask" >> tempdir/Dockerfile
+echo << EOF > tempdir/Dockerfile
+From python 
 
-echo "COPY ./static /home/myapp/static/" >> tempdir/Dockerfile
-echo "COPY ./templates /home/myapp/templates/" >> tempdir/Dockerfile
-echo "COPY sample_app.py /home/myapp/" >> tempdir/Dockerfile
+COPY ./static /home/myapp/static/
+COPY ./templates /home/myapp/templates/
+COPY sample_app.py /home/myapp/
+COPY requirements.txt /home/myapp
 
-echo "EXPOSE 8080" >> tempdir/Dockerfile
+RUN pip install -r /home/nyapp/requirements.txt
 
-echo "CMD python3 /home/myapp/sample_app.py" >> tempdir/Dockerfile
+EXPOSE 8080 
+
+CMD python3 /home/myapp/sample_app.py
+EOF
 
 cd tempdir
 
